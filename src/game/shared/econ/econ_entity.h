@@ -60,7 +60,7 @@ public:
 	virtual void UpdateAttachmentModels( void );
 	virtual bool AttachmentModelsShouldBeVisible( void ) const { return true; }
 
-	virtual IMaterial *GetMaterialOverride( int iIndex ) const;
+	IMaterial *GetMaterialOverride( int iIndex ) const;
 	virtual void SetMaterialOverride( int iIndex, const char *pszMaterial );
 	virtual void SetMaterialOverride( int iIndex, CMaterialReference &material );
 
@@ -87,8 +87,8 @@ public:
 
 	virtual CAttributeManager *GetAttributeManager( void ) { return &m_AttributeManager; }
 	virtual CAttributeContainer *GetAttributeContainer( void ) { return &m_AttributeManager; }
-	virtual CBaseEntity *GetAttributeOwner( void ) { return GetOwnerEntity(); }
-	virtual CAttributeList *GetAttributeList( void ) { return m_AttributeManager.GetItem()->GetAttributeList(); }
+	virtual CBaseEntity *GetAttributeOwner( void ) { return NULL; }
+	virtual CAttributeList *GetAttributeList( void ) { return &m_AttributeList; }
 	virtual void ReapplyProvision( void );
 	void InitializeAttributes( void );
 
@@ -106,6 +106,7 @@ protected:
 private:
 	CNetworkVarEmbedded( CAttributeContainer, m_AttributeManager );
 
+	CAttributeList m_AttributeList;
 #ifdef CLIENT_DLL
 	CHandle<C_ViewmodelAttachmentModel> m_hAttachmentParent;
 #endif

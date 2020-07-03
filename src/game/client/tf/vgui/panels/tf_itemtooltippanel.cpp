@@ -129,17 +129,17 @@ void CTFItemToolTipPanel::ShowToolTip(CEconItemDefinition *pItemData)
 
 	if ( m_pClassName )
 	{
-		m_pClassName->SetText( pItemData->GetTypeName() );
+		m_pClassName->SetText( pItemData->item_type_name );
 	}
 	
 	
 	if ( m_pYear )
 	{
 		// Show the item's year at the beginning.
-		if (pItemData->year >= 2006)	// Only debug, undefined always whitelisted items before this period.
+		if ((pItemData->year) >= 2006)	// Only debug, undefined always whitelisted items before this period.
 		{
 			wchar_t wszYear[128];
-			swprintf_s(wszYear, L"%d", pItemData->year);
+			swprintf_s(wszYear, L"%d", (pItemData->year));
 			m_pYear->SetText(wszYear);
 			
 		}
@@ -157,10 +157,10 @@ void CTFItemToolTipPanel::ShowToolTip(CEconItemDefinition *pItemData)
 			if ( i == pItemData->attributes.Count() )
 			{
 				// Show item description at the end.
-				if ( !pItemData->GetDescription() )
+				if ( pItemData->item_description[0] == '\0' )
 					continue;
 
-				pLabel->SetText( pItemData->GetDescription() );
+				pLabel->SetText( pItemData->item_description );
 
 				pLabel->SetFgColor( pScheme->GetColor( "ItemAttribNeutral", COLOR_WHITE ) );
 				pLabel->SetVisible( true );
@@ -172,7 +172,8 @@ void CTFItemToolTipPanel::ShowToolTip(CEconItemDefinition *pItemData)
 				if ( !pStatic || pStatic->hidden )
 					continue;
 
-				float flValue = pAttribute->value.flVal;
+				float flValue = BitsToFloat( pAttribute->value.iVal );
+			
 				switch ( pStatic->description_format )
 				{
 				case ATTRIB_FORMAT_PERCENTAGE:
@@ -191,7 +192,7 @@ void CTFItemToolTipPanel::ShowToolTip(CEconItemDefinition *pItemData)
 				wchar_t wszValue[32];
 				V_snwprintf( wszValue, sizeof( wszValue ) / sizeof( wchar_t ), L"%.0f", flValue );
 
-				const wchar_t *pszLocalized = g_pVGuiLocalize->Find( pStatic->GetDescription() );
+				const wchar_t *pszLocalized = g_pVGuiLocalize->Find( pStatic->description_string );
 
 				if ( !pszLocalized || pszLocalized[0] == '\0' )
 					continue;
